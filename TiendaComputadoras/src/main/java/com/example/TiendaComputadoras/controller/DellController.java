@@ -2,18 +2,14 @@ package com.example.TiendaComputadoras.controller;
 
 import com.example.TiendaComputadoras.DTO.DTODell;
 import com.example.TiendaComputadoras.Service.INServDell;
-import com.example.TiendaComputadoras.Service.ServiceDell;
-import com.example.TiendaComputadoras.model.Dell;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
+import java.util.*;
 
 @RestController
 @RequestMapping("/Dell")
@@ -61,10 +57,22 @@ public class DellController {
     public DTODell dellCrear(@RequestBody DTODell data){
         return serviceDell.save(data);
     }*/
-    public ResponseEntity<?> create(@Valid @RequestBody DTODell data){
-        DTODell dtoDell = serviceDell.save(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dtoDell); //201
+    public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody DTODell data){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DTODell dtoDell = serviceDell.save(data);
+        }catch (Exception e) {
+
+            response.put("mensaje", "hubo un error");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        //return ResponseEntity.status(HttpStatus.CREATED).body(dtoDell); //201
+        return ResponseEntity.created(URI.create("1")).build();
     }
+    //manejador de errores exceptionHandler
+
     //@PutMapping("/dellModificar") //yo en mi put no obtengo el id en url si no viene todo en el body el id
     @PutMapping("/{id}")
     //public String dellModificar(@RequestBody Dell data) //modificamos la respuesta a 201
@@ -92,6 +100,33 @@ public class DellController {
         serviceDell.deleteById(id);
         return (ResponseEntity<?>) ResponseEntity.noContent().build();//204 no hay contenido
     }
+
+/*
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return errors;
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> handleException(Exception ex) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", ex.getMessage());
+        map.put("timestamp", new Date());
+        return map;
+    }
+    */
 
 
 

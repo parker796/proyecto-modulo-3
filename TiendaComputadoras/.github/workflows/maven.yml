@@ -3,7 +3,6 @@ name: spring-boot add CI/CD with EBS
 on:
   push:
     branches: [ "main" ]
-
 jobs:
   tests:
     name: Tests

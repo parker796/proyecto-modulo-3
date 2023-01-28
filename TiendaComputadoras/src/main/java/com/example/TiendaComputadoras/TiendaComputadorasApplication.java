@@ -9,8 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TiendaComputadorasApplication implements CommandLineRunner {
+public class TiendaComputadorasApplication { //implements CommandLineRunner {
 
+	/*
 	private Person person;
 	private Component_Product componet;
 	//inyeccion de dependencias por constructor no lleva el autowired pero lo ponemos para mayor claridad
@@ -19,11 +20,11 @@ public class TiendaComputadorasApplication implements CommandLineRunner {
 		this.person = person;
 		this.componet = component;
 	}
-
+*/
 	public static void main(String[] args) {
 		SpringApplication.run(TiendaComputadorasApplication.class, args);
 	}
-
+/*
 	@PostConstruct
 	public void init() {
 		person.setName("Victor Estupiñan");
@@ -35,4 +36,6 @@ public class TiendaComputadorasApplication implements CommandLineRunner {
 		System.out.println(person.greet("Joaquin gonzalez"));
 		System.out.println(componet.componentNew("Geoforce GTX"));
 	}
+	*/
+
 }

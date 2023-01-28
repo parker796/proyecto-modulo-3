@@ -57,7 +57,8 @@ public class DellController {
         List<DTODell> o = serviceDell.findAllById(id);
         if (o == null) {
            // return ResponseEntity.notFound().build();//404
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El equipo Dell con el id especificado no existe.");
+            //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El equipo Dell con el id especificado no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Dell con el id especificado no existe.");
         }
         return ResponseEntity.ok(o.get(0)); //200
     }
@@ -102,7 +103,7 @@ public class DellController {
        List<DTODell> o = serviceDell.findAllById(id);
        if(o == null){
          //  return ResponseEntity.notFound().build(); //404
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El equipo Dell con el id especificado no existe.");
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Dell con el id especificado no existe.");
        }
        serviceDell.updateDell(dell);
        return ResponseEntity.status(HttpStatus.CREATED).body("se actualizo correctamente"); //tenemos que persistir los datos en BD

@@ -5,6 +5,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import com.example.TiendaComputadoras.model.Dell;
 
+
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface DellMapper {
     DTODell toDTO(Dell data);

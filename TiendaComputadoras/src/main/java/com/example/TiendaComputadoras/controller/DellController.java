@@ -116,6 +116,11 @@ public class DellController {
         return "se elimino correctamente ";
     }*/
     public ResponseEntity<?> delete(@PathVariable Long id){
+        List<DTODell> o = serviceDell.findAllById(id);
+        if(o == null){
+            //  return ResponseEntity.notFound().build(); //404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Dell con el id especificado no existe.");
+        }
         serviceDell.deleteById(id);
         return (ResponseEntity<?>) ResponseEntity.noContent().build();//204 no hay contenido
     }

@@ -1,9 +1,9 @@
 package com.example.TiendaComputadoras.controller;
 
 import com.example.TiendaComputadoras.DTO.DTOApple;
+import com.example.TiendaComputadoras.DTO.DTOCliente;
 import com.example.TiendaComputadoras.DTO.DTODell;
-import com.example.TiendaComputadoras.Service.INServApple;
-import com.example.TiendaComputadoras.model.Apple;
+import com.example.TiendaComputadoras.Service.INServCliente;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,89 +16,70 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
-@RequestMapping("/Apple")
-public class AppleController {
-   private INServApple serviceApple;
+@RequestMapping("/Cliente")
+public class ClienteController {
+    //igual lo mismo inyectamos la dependencia del servicio correspondiente
+    private INServCliente serviceCliente;//polimorfismo cambiamos de estado en el objeto
 
-   @Autowired
-    public AppleController(INServApple serviceApple) {
-      this.serviceApple = serviceApple;
+    @Autowired //este no es necesario
+    public ClienteController(INServCliente serviceCliente) {
+        this.serviceCliente = serviceCliente;
     }
 
-    //@GetMapping("/obtenerApples")
     @GetMapping
-    //public List<Apple> obtenerApples()
-    /*
-    public List<DTOApple> obtenerApples(){
-        return serviceApple.findAll();
-    }*/
-    public ResponseEntity<?> list(){
-        return ResponseEntity.ok().body(serviceApple.findAll());//construimos ya el json para el fronted 200
+    public ResponseEntity<?> list() {
+        return ResponseEntity.ok().body(serviceCliente.findAll());//construimos ya el json para el fronted 200
     }
 
     @GetMapping("/{id}")
-    /*
-    public List<DTOApple> obtenerCurso(@PathVariable Long id) {
-
-       return serviceApple.findAllById(id);
-    }*/
-    public ResponseEntity<?> view(@PathVariable Long id){
-        List<DTOApple> o = serviceApple.findAllById(id);
+    public ResponseEntity<?> view(@PathVariable Long id) {
+        List<DTOCliente> o = serviceCliente.findAllById(id);
         if (o == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Apple con el id especificado no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El Cliente con el id especificado no existe.");
         }
         return ResponseEntity.ok(o.get(0)); //200
     }
 
-   // @PostMapping("/appleCrear")
     @PostMapping
-    /*
-    public DTOApple appleCrear(@RequestBody DTOApple data){ //viene un objeto json y lo convierte a una clase java
-
-       return serviceApple.save(data);
-    }*/
-    public ResponseEntity<?> create(@RequestBody DTOApple data){
-        DTOApple dtoApple = serviceApple.save(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dtoApple); //201
+    public ResponseEntity<?> create(@RequestBody DTOCliente data) {
+        DTOCliente dtoCliente = serviceCliente.save(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCliente); //201
     }
-
-   // @PutMapping("/appleModificar") //igual el id viene en el cuerpo del mensaje a actualizar
     @PutMapping("/{id}")
-    /*
-    public String appleModificar(@RequestBody DTOApple data){
-        serviceApple.updateApple(data);
-        return "se actualizo correctamente";
-    }*/
-    public ResponseEntity<?> edit(@RequestBody DTOApple apple, @PathVariable Long id){
-        List<DTOApple> o = serviceApple.findAllById(id);
+    public ResponseEntity<?> edit(@RequestBody DTOCliente cliente, @PathVariable Long id){
+        List<DTOCliente> o = serviceCliente.findAllById(id);
         if(o == null){
-           // return ResponseEntity.notFound().build(); //404
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Apple con el id especificado no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El Cliente con el id especificado no existe.");
         }
-        serviceApple.updateApple(apple);
+        serviceCliente.updateCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body("se actualizo correctamente"); //tenemos que persistir los datos en BD
     }
-
     @DeleteMapping("/{id}")
-    /*
-    public String appleEliminar(@PathVariable Long id){
-       serviceApple.appleEliminar(id);
-       return "se elimino correctamente";
-    }*/
     public ResponseEntity<?> delete(@PathVariable Long id){
-        List<DTOApple> o = serviceApple.findAllById(id);
+        List<DTOCliente> o = serviceCliente.findAllById(id);
         if(o == null){
-            //  return ResponseEntity.notFound().build(); //404
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Apple con el id especificado no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El equipo Cliente con el id especificado no existe.");
         }
-        serviceApple.appleEliminar(id);
+        serviceCliente.deleteById(id);
         return (ResponseEntity<?>) ResponseEntity.noContent().build();//204 no hay contenido
+    }
+
+    //hacemos los servicios para asociar el id del cliente con un producto seleccionado
+    //se maneja como un putmapping porque editamos el cliente con la lista de la relacion en vacion puede o no tener productos tenemos opcionalidad
+    @PutMapping("/{id}/asignar-productos") //id del cliente y asignacion del producto
+    public ResponseEntity<?> asignarProducto(@PathVariable Long id, @RequestBody List<DTODell> dells, @RequestBody List<DTOApple> apples){
+        List<DTOCliente> o = serviceCliente.findAllById(id);
+        if(o.isEmpty()) { //hay como un error con o.isPresent mejor como isEmpty() u o == null
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El Cliente con el id especificado no existe.");
+        }
+        if(dells.isEmpty() && apples.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debes de mandar una lista ya sea dell u apple");
+        }
+        serviceCliente.asignarProducto(id, dells, apples);
+        return ResponseEntity.status(HttpStatus.CREATED).body("se asigno un equipo con el id del cliente satisfactoriamente");
     }
 
     //dejamos pendiente el controllerAdviceException para todo los controladores
@@ -159,5 +140,5 @@ public class AppleController {
 
 
 
-
 }
+

@@ -5,6 +5,7 @@ import com.example.TiendaComputadoras.model.Dell;
 
 import java.util.List;
 
+
 public interface INServDell {
    // public List<Dell> obtenerDells(); //sustituimos el acceso que haciamos hacia nuestra entidad con nuestro DTO
     public List<DTODell> findAll();

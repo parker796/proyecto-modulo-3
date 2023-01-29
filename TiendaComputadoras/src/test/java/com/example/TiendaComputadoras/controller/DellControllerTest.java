@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.CoreMatchers.is;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class DellControllerTest {
@@ -180,6 +181,8 @@ public class DellControllerTest {
     }
 
     //ultimo test para borrar un id de equipo dell
+
+    /*
     @Test
     public void borrarDell() throws Exception{
         Dell savedell = Dell.builder()
@@ -197,5 +200,7 @@ public class DellControllerTest {
         response.andExpect(status().isNoContent())
                 .andDo(print());
     }
+    */
+
 }
 

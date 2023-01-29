@@ -3,7 +3,7 @@
 ## Descripcion
 en este proyecto se utilizo lo del modulo anterior
 ya con especificaciones de este modulo como spring-security,
-manejo de errores, validaciones etc.
+manejo de errores, validaciones, manejamos test con Junit5.
 
 ## Logins
 

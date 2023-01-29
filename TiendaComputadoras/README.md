@@ -1,6 +1,6 @@
 # **Tienda de Computadoras Spring boot**
 
-## Description
+## Descripcion
 en este proyecto se utilizo lo del modulo anterior
 ya con especificaciones de este modulo como spring-security,
 manejo de errores, validaciones etc.
